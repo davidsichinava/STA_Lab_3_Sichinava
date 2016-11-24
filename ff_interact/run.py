@@ -1,7 +1,3 @@
-import sys
-
-sys.path.insert(0, 'forestfire')
-
-import server.py
+from forest_fire.server import server
 
 server.launch()

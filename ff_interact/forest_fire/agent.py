@@ -1,38 +1,29 @@
 from mesa import Agent
+import random
+import numpy as np
+from numpy.random import uniform
+from numpy import multiply
 
+def surf_function(dim=(100,100), low=500, high=1000):
+    r = uniform(low, high, size=multiply(*dim)).reshape(dim)
+surf=surf_function()
 
 class TreeCell(Agent):
-    """
-    A tree cell.
 
-    Attributes:
-        x, y: Grid coordinates
-        condition: Can be "Fine", "On Fire", or "Burned Out"
-        unique_id: (x,y) tuple.
-
-    unique_id isn't strictly necessary here, but it's good
-    practice to give one to each agent anyway.
-    """
     def __init__(self, pos, model):
-        """
-        Create a new tree.
-        Args:
-            pos: The tree's coordinates on the grid.
-            model: standard model reference for agent.
-        """
-        super().__init__(pos, model)
+
+        Agent.__init__(self, pos, model)
         self.pos = pos
         self.condition = "Fine"
+        self.hght = surf[pos]
 
     def step(self):
-        """
-        If the tree is on fire, spread it to fine trees nearby.
-        """
+
         if self.condition == "On Fire":
             for neighbor in self.model.grid.neighbor_iter(self.pos):
-                if neighbor.condition == "Fine":
+                if neighbor.condition == "Fine" and neighbor.hght>=self.hght:
                     neighbor.condition = "On Fire"
             self.condition = "Burned Out"
-
+        
     def get_pos(self):
         return self.pos
